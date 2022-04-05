@@ -7,7 +7,7 @@ const hbs  = require('express-handlebars');
 const app = express()
 const port = 2509
 
-app.use(express.static(path.join(__dirname,'pulic')))
+app.use(express.static(path.join(__dirname,'public')));
 
 
 //http logger
