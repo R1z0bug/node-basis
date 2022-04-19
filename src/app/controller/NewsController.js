@@ -1,10 +1,13 @@
-class NewController{
+// const res = require("express/lib/response");
 
-
-    // [GET] / news
-    index(req, res){
-        res.render('news');
-    }
+class NewController {
+  // [GET] / news
+  index(req, res) {
+    res.render("news");
+  }
+  //GET /news/:slug
+  show(req, res) {
+    res.send("news");
+  }
 }
-module.exports = new NewController;
-
+module.exports = new NewController();
