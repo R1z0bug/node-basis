@@ -12,4 +12,4 @@ npm start
 ```
 
 Docker
-src/public/img/aaa.png
+![alt text]https://github.com/R1z0bug/node-basis/tree/main/src/public/img/aaa.png
