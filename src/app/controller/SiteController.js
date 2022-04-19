@@ -1,16 +1,17 @@
 // const res = require("express/lib/response");
-
 const Course = require("../models/Course");
-
+const { mutipleMongooseToOject } = require('../../util/mongoose');
 class SiteController {
   // [GET] /
-  index(req, res) {
+  index(req, res,next) {
 
-    Course.find({}, function(err, courses){
-      if(!err) return res.json(courses);
-      res.status(400).json({ error:'error!' });
-    });
-    // res.render("home");
+
+    Course.find({})
+    .then(courses => { res.render('home',{courses : mutipleMongooseToOject(courses)});
+    })
+    .catch((error => next(error)));
+  
+  // res.render(console.log(typeof Course));
   }
   //GET /search
   search(req, res) {
