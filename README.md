@@ -12,4 +12,4 @@ npm start
 ```
 
 Docker
-# src/public/img/aaa.png
+src/public/img/aaa.png
