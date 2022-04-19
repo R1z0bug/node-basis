@@ -10,7 +10,11 @@ npm i
 npm install
 npm start
 ```
+https://github.com/R1z0bug/node-basis/tree/main/src/public/img/aaa.png
 
-<img src="src/public/img/aaa.png" >
 
-![alt text]https://github.com/R1z0bug/node-basis/tree/main/src/public/img/aaa.png
+
+Docker
+
+
+
