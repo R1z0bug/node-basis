@@ -7,35 +7,17 @@ pipeline {
   }
 
   stages {
-    stage('test') {
-      agent {
-          docker {
-            image 'node:19-buster-slim'
-            args '-u 0:0 -v /tmp:/root/.cache'
-          }
-      }
-    }
-
-    stage("build") {
-      agent { node {label 'master'}}
-      environment {
-        DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
-      }
-      steps {
-        sh "docker build -t ${DOCKER_IMAGE}:${DOCKER_TAG} . "
-        sh "docker tag ${DOCKER_IMAGE}:${DOCKER_TAG} ${DOCKER_IMAGE}:latest"
-        sh "docker image ls | grep ${DOCKER_IMAGE}"
-        // withCredentials([usernamePassword(credentialsId: 'docker-hub', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
-        //     sh 'echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin'
-        //     sh "docker push ${DOCKER_IMAGE}:${DOCKER_TAG}"
-        //     sh "docker push ${DOCKER_IMAGE}:latest"
-        // }
-
-        //clean to save disk
-        sh "docker image rm ${DOCKER_IMAGE}:${DOCKER_TAG}"
-        sh "docker image rm ${DOCKER_IMAGE}:latest"
-      }
-    }
+        stage('Check Version Code') {
+                    steps {
+                        script {
+                            def packageJson = readJSON file: 'package.json'
+                            def versionCode = packageJson.versionCode
+                            if (versionCode < 10) {
+                                error "Version code must be greater than or equal to 10."
+                            }
+                        }
+                    }
+        }
   }
 
   post {
