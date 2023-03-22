@@ -24,7 +24,7 @@ pipeline {
         stage('Check Version Code') {
                     steps {
                         script {
-                          PACKAGE_VERSION = sh returnStdout: true, script: '''grep 'version' package.json | cut -d '"' -f4 | tr '\n' '\0''''
+                          def PACKAGE_VERSION = sh(script: "node -p \"require('./package.json').version\"", returnStdout: true).trim()
                           echo $PACKAGE_VERSION
                         }
                     }
