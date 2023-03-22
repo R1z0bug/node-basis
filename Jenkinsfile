@@ -1,11 +1,17 @@
 pipeline {
-    environment {
+
+  agent none
+  environment {
      BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
   }
-  agent any
-
   stages {
+    agent {
+          docker {
+            image 'node:19-slim-buster'
+            args '-u 0:0 -v /tmp:/root/.cache'
+          }
+    }
             stage('Checkout') {
         steps {
           checkout scm
@@ -22,9 +28,10 @@ pipeline {
             
 
         stage('Check Version Code') {
+           agent { node {label 'master'}}
                     steps {
                         script {
-                          def PACKAGE_VERSION = sh(script: "node -p \"require('./package.json').version\"", returnStdout: true).trim()
+                          def PACKAGE_VERSION = sh "VERSION=${version}_${BUILD_NUMBER}_${BRANCH_NAME} npm run build"
                           echo $PACKAGE_VERSION
                         }
                     }
