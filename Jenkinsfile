@@ -1,18 +1,16 @@
 pipeline {
-    environment {
-     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+
+  agent any
+  environment {
+    BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
   }
-  agent any
-
   stages {
 
         stage('Git Clone') {
             steps {
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                    dir(BACKEND_WORKSPACE) {
                         git branch: "${GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${GIT_URL}"
-                    }
                 }
             }
         }
