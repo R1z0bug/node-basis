@@ -10,36 +10,51 @@ pipeline {
     // ----------------
 
     stages {
-        stage('Check out') {
+        stage('Git Clone') {
             steps {
-                echo 'Check out build..'
+              // echo $(env.GIT_BRANCH)
+              // echo env.GIT_URL
+                catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
+                        git branch: "${BRANCH_NAME}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${env.GIT_URL}"
+                }
+            }
+        }
+        stage('Notify build') {
+            steps {
+                echo 'Notify build..'
                 
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        Send_Telegram_message(BRANCH_NAME)
+                        version_build=check_version_code(Development)
+                        Send_Telegram_message(BRANCH_NAME,version_build)
                     } else if (BRANCH_NAME == 'main') {
                         BRANCH_NAME = 'Production'
+                        version_build=check_version_code()
                         Send_Telegram_message(BRANCH_NAME)
-                        sh "pwd && ls"
-                        echo 'Building Environment: ' + BRANCH_NAME
                     }
                 }
                 echo 'Building Branch: ' + env.BRANCH_NAME
                 echo 'Build Number: ' + TAG
                 echo 'Building Environment: ' + BRANCH_NAME
-
-                echo "Running your service with environemnt ${BRANCH_NAME} now"
             }
         }
     }
 }
 
-void Send_Telegram_message(String env_name){
+void Send_Telegram_message(String env_name,String  version_build){
 //------- gửi thông báo đến telegram khi có commit
-                        def message = "${env_name} ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+                        def message = "Buiding ${env_name} ${env.JOB_NAME} version ${version_build}"
                         def botToken = env.TELEGRAM_CREDENTIAL_ID
                         def chatId = env.TELEGRAM_CHAT_ID
                         sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
-
-   }
+}
+void check_version_code(String branch_verion)
+{
+  if(branch_verion!="Development"){
+    def PACKAGE_VERSION = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+  } else{
+    def PACKAGE_VERSION = env.BUILD_NUMBER
+  }
+  return PACKAGE_VERSION
+}
