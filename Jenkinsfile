@@ -20,11 +20,12 @@ pipeline {
                     } else if (ENV_NAME == 'main') {
                         ENV_NAME = 'Production'
                         Send_Telegram_message(ENV_NAME)
+                        echo 'Building Environment: ' + ENV_NAME
                     }
                 }
                 echo 'Building Branch: ' + env.ENV_NAME
                 echo 'Build Number: ' + env.BUILD_NUMBER
-                echo 'Building Environment: ' + ${ENV_NAME}
+                echo 'Building Environment: ' + ENV_NAME
 
                 echo "Running your service with environemnt ${ENV_NAME} now"
             }
