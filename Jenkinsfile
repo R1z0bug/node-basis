@@ -52,10 +52,10 @@ void Send_Telegram_message(String env_name,String  version_build){
 }
 void check_version_code(String branch_verion)
 {
-  if(branch_verion!="Development"){
+  if(branch_verion=="Production"){
     def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
   } else{
     def version = env.BUILD_NUMBER
   }
-  sh "echo $version"
+  resturn version
 }
