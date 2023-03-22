@@ -10,6 +10,7 @@ pipeline {
         steps {
           checkout scm
           echo env.BRANCH_NAME
+          echo env.GIT_URL
         }
         }
 
