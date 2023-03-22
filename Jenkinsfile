@@ -27,11 +27,11 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        version_build=check_version_code(Development)
+                        version_build=check_version_code(BRANCH_NAME)
                         Send_Telegram_message(BRANCH_NAME,version_build)
                     } else if (BRANCH_NAME == 'main') {
                         BRANCH_NAME = 'Production'
-                        version_build=check_version_code()
+                        version_build=check_version_code(BRANCH_NAME)
                         Send_Telegram_message(BRANCH_NAME)
                     }
                 }
