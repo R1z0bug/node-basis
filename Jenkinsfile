@@ -6,12 +6,14 @@ pipeline {
     DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
   }
   stages {
+        stage("Test") {
     agent {
           docker {
             image 'node:19-slim-buster'
             args '-u 0:0 -v /tmp:/root/.cache'
           }
     }
+        }
             stage('Checkout') {
         steps {
           checkout scm
