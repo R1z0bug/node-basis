@@ -12,9 +12,9 @@ pipeline {
                 echo 'Building Container..'
 
                 script {
-                    if (ENVIRONMENT_NAME == 'development') {
+                    if (ENV_NAME == 'development') {
                         ENV_NAME = 'Development'
-                    } else if (ENVIRONMENT_NAME == 'main') {
+                    } else if (ENV_NAME == 'main') {
                         ENV_NAME = 'Production'
                     }
                 }
