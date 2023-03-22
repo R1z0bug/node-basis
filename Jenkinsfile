@@ -7,11 +7,15 @@ pipeline {
     GIT_CREDENTIAL_ID='token-github1'
   }
   stages {
-
+        // stage('check out') {
+        //   steps{
+        //     checkout scm
+        //   }
+        // }
         stage('Git Clone') {
             steps {
-              echo $GIT_BRANCH
-              echo $GIT_URL
+              echo env.GIT_BRANCH
+              echo env.GIT_URL
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                         git branch: "${GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${GIT_URL}"
                 }
