@@ -6,14 +6,21 @@ pipeline {
   agent any
 
   stages {
-
-        stage('Checkout') {
+            stage('Checkout') {
         steps {
           checkout scm
           echo env.BRANCH_NAME
           echo env.GIT_URL
         }
         }
+                stage('Git Clone'){
+            steps{
+                script {
+                    git branch: "${BRANCH_NAME}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${env.GIT_URL}"
+                }}
+                }
+            
+
         stage('Check Version Code') {
                     steps {
                         script {
