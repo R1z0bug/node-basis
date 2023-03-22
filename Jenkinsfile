@@ -4,6 +4,7 @@ pipeline {
   environment {
     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
+    GIT_CREDENTIAL_ID='token-github1'
   }
   stages {
 
