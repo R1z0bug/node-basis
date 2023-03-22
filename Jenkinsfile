@@ -3,6 +3,7 @@ pipeline {
     environment {
         BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
         TAG = "${env.BUILD_NUMBER}"
+        GIT_CREDENTIAL_ID='token-github1'
         TELEGRAM_CHAT_ID = -796162386 
         TELEGRAM_CREDENTIAL_ID="6222583878:AAGXWc836jYOGwLeiHvXIPY4aijeECVskxA"
     }
