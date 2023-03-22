@@ -38,7 +38,7 @@ void Send_Telegram_message(String env_name){
 //------- gửi thông báo đến telegram khi có commit
      withCredentials(([string(credentialsId: 'telegram_token_bot', variable: 'TOKEN'),
       string(credentialsId: 'telegram_token_bot', variable: 'TELEGRAM_CHAT_ID')])) {
-        sh "echo ${TOKEN}\ "
+        sh "echo ${TOKEN} "
       sh 'curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d "chat_id=${TELEGRAM_CHAT_ID}"  -d text="[✅] Build ${env_name} 😊"'
       }
    }
