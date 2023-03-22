@@ -16,10 +16,8 @@ pipeline {
                 
                 script {
                     if (BRANCH_NAME == 'development') {
-                        BRANCH_NAME = 'Development'
                         Send_Telegram_message(BRANCH_NAME)
                     } else if (BRANCH_NAME == 'main') {
-                        BRANCH_NAME = 'Production'
                         Send_Telegram_message(BRANCH_NAME)
                         echo 'Building Environment: ' + BRANCH_NAME
                     }
@@ -28,7 +26,7 @@ pipeline {
                 echo 'Build Number: ' + TAG
                 echo 'Building Environment: ' + BRANCH_NAME
 
-                echo "Running your service with environemnt ${ENV_NAME} now"
+                echo "Running your service with environemnt ${BRANCH_NAME} now"
             }
         }
     }
