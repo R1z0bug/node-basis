@@ -1,5 +1,7 @@
 pipeline {
-
+    environment {
+     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+  }
   agent any
 
   stages {
@@ -7,6 +9,7 @@ pipeline {
         stage('Checkout') {
         steps {
           checkout scm
+          echo env.BRANCH_NAME
         }
         }
 
