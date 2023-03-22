@@ -2,15 +2,18 @@ pipeline {
 
   agent any
 
-  environment {
-    DOCKER_IMAGE = "tienlh/nodejs-docker"
-  }
-
   stages {
+
+        stage('Checkout') {
+        steps {
+          checkout scm
+        }
+        }
+
         stage('Check Version Code') {
                     steps {
                         script {
-                            def packageJson = readFile file: 'package.json'
+                            def packageJson = readJSON  file: 'package.json'
                             def versionCode = packageJson.versionCode
                             if (versionCode < 10) {
                                 error "Version code must be greater than or equal to 10."
