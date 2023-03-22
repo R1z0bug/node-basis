@@ -32,7 +32,7 @@ pipeline {
                     } else if (BRANCH_NAME == 'main') {
                         BRANCH_NAME = 'Production'
                         version_build=check_version_code(BRANCH_NAME)
-                        Send_Telegram_message(BRANCH_NAME)
+                        Send_Telegram_message(BRANCH_NAME,version_build)
                     }
                 }
                 echo 'Building Branch: ' + env.BRANCH_NAME
@@ -53,9 +53,9 @@ void Send_Telegram_message(String env_name,String  version_build){
 void check_version_code(String branch_verion)
 {
   if(branch_verion!="Development"){
-    def PACKAGE_VERSION = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+    def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
   } else{
-    def PACKAGE_VERSION = env.BUILD_NUMBER
+    def version = env.BUILD_NUMBER
   }
-  return PACKAGE_VERSION
+  return version
 }
