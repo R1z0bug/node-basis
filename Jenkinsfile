@@ -25,7 +25,7 @@ pipeline {
         stage('Check Version Code') {
                     steps {
                         script {
-                              def PACKAGE_VERSION = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                               PACKAGE_VERSION = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                               echo $PACKAGE_VERSION
 
                             }
