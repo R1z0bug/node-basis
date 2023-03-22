@@ -5,6 +5,7 @@ pipeline {
     BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
     DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
     GIT_CREDENTIAL_ID='token-github1'
+    
   }
   stages {
         // stage('check out') {
@@ -17,7 +18,7 @@ pipeline {
               // echo $(env.GIT_BRANCH)
               // echo env.GIT_URL
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                        git branch: "${env.GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${env.GIT_URL}"
+                        git branch: "${BRANCH_NAME}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${env.GIT_URL}"
                 }
             }
         }
