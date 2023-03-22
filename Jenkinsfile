@@ -1,6 +1,7 @@
 pipeline {
     environment {
      BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+    DOCKER_TAG="${GIT_BRANCH.tokenize('/').pop()}-${GIT_COMMIT.substring(0,7)}"
   }
   agent any
 
@@ -13,31 +14,11 @@ pipeline {
           echo env.GIT_URL
         }
         }
-        stage('Build') {
-      steps {
-        sh 'npm install'
-      }
-    }
-    stage('Test') {
-      steps {
-        sh 'npm run test'
-      }
-    }
-        stage('Deploy') {
-      when {
-        branch 'main'
-      }
-      steps {
-        sh 'npm run deploy'
-      }}
-        stage('Check Version ') {
+        stage('Check Version Code') {
                     steps {
                         script {
-                            def packageJson = readJSON  file: 'package.json'
-                            def versionCode = packageJson.versionCode
-                            if (versionCode < 10) {
-                                error "Version code must be greater than or equal to 10."
-                            }
+                          PACKAGE_VERSION = sh returnStdout: true, script: '''grep 'version' package.json | cut -d '"' -f4 | cut -d '.' -f1 | tr '\n' '\0'''' = sh returnStdout: true, script: '''grep 'version' package.json | cut -d '"' -f4 | cut -d '.' -f1 | tr '\n' '\0''''
+                          echo ${PACKAGE_VERSION}
                         }
                     }
         }
