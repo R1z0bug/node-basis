@@ -13,8 +13,24 @@ pipeline {
           echo env.GIT_URL
         }
         }
-
-        stage('Check Version Code') {
+        stage('Build') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    stage('Test') {
+      steps {
+        sh 'npm run test'
+      }
+    }
+        stage('Deploy') {
+      when {
+        branch 'main'
+      }
+      steps {
+        sh 'npm run deploy'
+      }
+        stage('Check Version ') {
                     steps {
                         script {
                             def packageJson = readJSON  file: 'package.json'
