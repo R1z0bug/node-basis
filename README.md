@@ -12,7 +12,7 @@ npm start
 ```
 https://github.com/R1z0bug/node-basis/tree/main/src/public/img/aaa.png
 
-
+1
 
 Docker
 
