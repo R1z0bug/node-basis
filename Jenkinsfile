@@ -57,5 +57,5 @@ void check_version_code(String branch_verion)
   } else{
     def version = env.BUILD_NUMBER
   }
-  return version
+  sh "echo $version"
 }
