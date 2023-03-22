@@ -29,7 +29,7 @@ pipeline {
       }
       steps {
         sh 'npm run deploy'
-      }
+      }}
         stage('Check Version ') {
                     steps {
                         script {
