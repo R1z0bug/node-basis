@@ -30,6 +30,7 @@ pipeline {
                               sh "pwd"
 
                             }
+                            echo $PACKAGE_VERSION
                         }
                     }
         }
