@@ -16,17 +16,19 @@ pipeline {
                 
                 script {
                     if (BRANCH_NAME == 'development') {
+                        BRANCH_NAME = 'Development'
                         Send_Telegram_message(BRANCH_NAME)
                     } else if (BRANCH_NAME == 'main') {
+                        BRANCH_NAME = 'Production'
                         Send_Telegram_message(BRANCH_NAME)
-                        // echo 'Building Environment: ' + BRANCH_NAME
+                        echo 'Building Environment: ' + BRANCH_NAME
                     }
                 }
                 echo 'Building Branch: ' + env.BRANCH_NAME
                 echo 'Build Number: ' + TAG
                 echo 'Building Environment: ' + BRANCH_NAME
 
-                echo "Building ${BRANCH_NAME} now"
+                echo "Running your service with environemnt ${BRANCH_NAME} now"
             }
         }
     }
@@ -36,8 +38,7 @@ void Send_Telegram_message(String env_name){
 //------- gửi thông báo đến telegram khi có commit
      withCredentials(([string(credentialsId: 'telegram_token_bot', variable: 'TOKEN'),
       string(credentialsId: 'telegram_token_bot', variable: 'TELEGRAM_CHAT_ID')])) {
-        sh "echo ${telegram_token_bot} ${TELEGRAM_CHAT_ID} "
+        sh "echo ${TOKEN}\ "
       sh 'curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d "chat_id=${TELEGRAM_CHAT_ID}"  -d text="[✅] Build ${env_name} 😊"'
       }
    }
- 
