@@ -10,7 +10,7 @@ pipeline {
         stage('Check Version Code') {
                     steps {
                         script {
-                            def packageJson = readJSON file: 'package.json'
+                            def packageJson = readFile file: 'package.json'
                             def versionCode = packageJson.versionCode
                             if (versionCode < 10) {
                                 error "Version code must be greater than or equal to 10."
