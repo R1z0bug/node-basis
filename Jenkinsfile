@@ -36,9 +36,9 @@ pipeline {
 
 void Send_Telegram_message(String env_name){
 //------- gửi thông báo đến telegram khi có commit
-     withCredentials(([string(credentialsId: 'telegram_token_bot', variable: 'TOKEN'),
-      string(credentialsId: 'telegram_token_bot', variable: 'TELEGRAM_CHAT_ID')])) {
-        sh "echo ${TOKEN} "
-      sh 'curl -s -X POST https://api.telegram.org/bot${TOKEN}/sendMessage -d "chat_id=${TELEGRAM_CHAT_ID}"  -d text="[✅] Build ${env_name} 😊"'
-      }
+                        def message = "${env_name} ${env.JOB_NAME} ${env.BUILD_NUMBER}"
+                        def botToken = "6222583878:AAGXWc836jYOGwLeiHvXIPY4aijeECVskxA"
+                        def chatId = env.TELEGRAM_CHAT_ID
+                        sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
+
    }
