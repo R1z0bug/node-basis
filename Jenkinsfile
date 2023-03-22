@@ -26,7 +26,8 @@ pipeline {
                     steps {
                         script {
                               def PACKAGE_VERSION = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
-                              echo $PACKAGE_VERSION
+                              sh "echo $PACKAGE_VERSION"
+                              sh "pwd"
 
                             }
                         }
