@@ -14,10 +14,10 @@ pipeline {
         // }
         stage('Git Clone') {
             steps {
-              echo env.GIT_BRANCH
-              echo env.GIT_URL
+              // echo $(env.GIT_BRANCH)
+              // echo env.GIT_URL
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
-                        git branch: "${GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${GIT_URL}"
+                        git branch: "${env.GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${env.GIT_URL}"
                 }
             }
         }
