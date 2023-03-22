@@ -13,6 +13,7 @@ pipeline {
 
                 script {
                     if (ENV_NAME == 'development') {
+                      sh "pwd"
                         ENV_NAME = 'Development'
                     } else if (ENV_NAME == 'main') {
                         ENV_NAME = 'Production'
