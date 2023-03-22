@@ -10,6 +10,8 @@ pipeline {
 
         stage('Git Clone') {
             steps {
+              echo $GIT_BRANCH
+              echo $GIT_URL
                 catchError(buildResult: 'FAILURE', stageResult: 'FAILURE') {
                         git branch: "${GIT_BRANCH}", credentialsId: "${GIT_CREDENTIAL_ID}", url: "${GIT_URL}"
                 }
