@@ -27,12 +27,13 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        version_build=check_version_code(BRANCH_NAME)
-                        Send_Telegram_message(BRANCH_NAME,version_build)
+                        def version = env.BUILD_NUMBER
+                        Send_Telegram_message(BRANCH_NAME,version)
                     } else if (BRANCH_NAME == 'main') {
                         BRANCH_NAME = 'Production'
-                        version_build=check_version_code(BRANCH_NAME)
-                        Send_Telegram_message(BRANCH_NAME,version_build)
+                       
+                        def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                        Send_Telegram_message(BRANCH_NAME,version)
                     }
                 }
                 echo 'Building Branch: ' + env.BRANCH_NAME
@@ -49,13 +50,4 @@ void Send_Telegram_message(String env_name,String  version_build){
                         def botToken = env.TELEGRAM_CREDENTIAL_ID
                         def chatId = env.TELEGRAM_CHAT_ID
                         sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
-}
-void check_version_code(String branch_verion)
-{
-  if(branch_verion=="Production"){
-    def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
-  } else{
-    def version = env.BUILD_NUMBER
-  }
-  resturn version
 }
