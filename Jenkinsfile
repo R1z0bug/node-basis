@@ -1,7 +1,8 @@
 pipeline {
     agent any
     environment {
-        ENV_NAME = "${env.BRANCH_NAME}"
+        BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
+        TAG = "${env.BUILD_NUMBER}"
         TELEGRAM_CHAT_ID = -796162386 
         TELEGRAM_CREDENTIAL_ID='telegram_token_bot'
     }
@@ -9,23 +10,23 @@ pipeline {
     // ----------------
 
     stages {
-        stage('Build Container') {
+        stage('Check out') {
             steps {
-                echo 'Building Container..'
-
+                echo 'Check out build..'
+                
                 script {
-                    if (ENV_NAME == 'development') {
-                        ENV_NAME = 'Development'
-                        Send_Telegram_message(ENV_NAME)
-                    } else if (ENV_NAME == 'main') {
-                        ENV_NAME = 'Production'
-                        Send_Telegram_message(ENV_NAME)
-                        echo 'Building Environment: ' + ENV_NAME
+                    if (BRANCH_NAME == 'development') {
+                        BRANCH_NAME = 'Development'
+                        Send_Telegram_message(BRANCH_NAME)
+                    } else if (BRANCH_NAME == 'main') {
+                        BRANCH_NAME = 'Production'
+                        Send_Telegram_message(BRANCH_NAME)
+                        echo 'Building Environment: ' + BRANCH_NAME
                     }
                 }
-                echo 'Building Branch: ' + env.ENV_NAME
-                echo 'Build Number: ' + env.BUILD_NUMBER
-                echo 'Building Environment: ' + ENV_NAME
+                echo 'Building Branch: ' + env.BRANCH_NAME
+                echo 'Build Number: ' + TAG
+                echo 'Building Environment: ' + BRANCH_NAME
 
                 echo "Running your service with environemnt ${ENV_NAME} now"
             }
