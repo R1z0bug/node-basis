@@ -27,7 +27,7 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        sh "cat version"
+                        sh "cat package.json"
                         def version = env.BUILD_NUMBER
                         Send_Telegram_message(BRANCH_NAME,version)
                     } else if (BRANCH_NAME == 'main') {
