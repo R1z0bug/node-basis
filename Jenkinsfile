@@ -27,11 +27,12 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
+                        sh "git branch -m"
                         def version = env.BUILD_NUMBER
                         Send_Telegram_message(BRANCH_NAME,version)
                     } else if (BRANCH_NAME == 'main') {
                         BRANCH_NAME = 'Production'
-                       
+                        sh "git branch -m"
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                         Send_Telegram_message(BRANCH_NAME,version)
                     }
