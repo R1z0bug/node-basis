@@ -3,7 +3,7 @@ pipeline {
     environment {
         BRANCH_NAME = "${GIT_BRANCH.split("/")[1]}"
         TAG = "${env.BUILD_NUMBER}"
-        GIT_CREDENTIAL_ID='token-github1'
+        GIT_CREDENTIAL_ID='token-github'
         TELEGRAM_CHAT_ID = -796162386 
         TELEGRAM_CREDENTIAL_ID="6222583878:AAGXWc836jYOGwLeiHvXIPY4aijeECVskxA"
     }
@@ -20,18 +20,19 @@ pipeline {
                 }
             }
         }
-        stage('Notify build') {
+        stage('Build and push') {
             steps {
                 echo 'Notify build..'
                 
                 script {
                     if (BRANCH_NAME == 'development') {
-                        BRANCH_NAME = 'Development'
+                        // env.BRANCH_NAME = 'Development'
                         def version = env.BUILD_NUMBER
+                        build_image(version)
                     } else if (BRANCH_NAME == 'main') {
-                        env.BRANCH_NAME = 'Production'
+                        // env.BRANCH_NAME = 'Production'
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
-                        
+                        build_image(version)
                     }
                 }
                 echo 'Building Branch: ' + env.BRANCH_NAME
@@ -39,18 +40,6 @@ pipeline {
                 echo 'Building Environment: ' + BRANCH_NAME
             }
         }
-        stage('build and push') {
-            steps{
-                        script {
-                            def dockerTag = "${env.GIT_URL}/nips:${version}"
-                            sh "docker build -t $dockerTag"
-                    }
-                
-            }
-            
-        }
-
-        
     }
     post{
           always{
@@ -68,5 +57,8 @@ pipeline {
     
 }
 
-
+void build_image(String version){
+    def dockerTag = "${env.GIT_URL}/BTI:${version}"
+    sh "docker build -t $dockerTag"
+}
 
