@@ -33,6 +33,7 @@ pipeline {
                         // env.BRANCH_NAME = 'Production'
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                     }
+                    sh "echo ${version}"
                     def dockerTag = "TEST/BTI:${version}"
                 }
                   
