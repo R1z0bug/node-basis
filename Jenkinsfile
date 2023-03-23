@@ -48,22 +48,15 @@ pipeline {
                 
             }
         }
+        Send_Telegram_message(BRANCH_NAME,version)
     }
-    post {
-      failure {
-              def message = "${BRANCH_NAME} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version}"
-              def botToken = env.TELEGRAM_CREDENTIAL_ID
-              def chatId = env.TELEGRAM_CHAT_ID
-              sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
-              }
-      success{
-              def message = "${BRANCH_NAME} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version}"
-              def botToken = env.TELEGRAM_CREDENTIAL_ID
-              def chatId = env.TELEGRAM_CHAT_ID
-              sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
-      }
-      }
 }
 
-
+void Send_Telegram_message(String env_name,String  version_build){
+//------- gửi thông báo đến telegram khi có commit
+                        def message = "${env_name} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version_build}"
+                        def botToken = env.TELEGRAM_CREDENTIAL_ID
+                        def chatId = env.TELEGRAM_CHAT_ID
+                        sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
+}
 
