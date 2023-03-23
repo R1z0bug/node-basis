@@ -6,6 +6,7 @@ pipeline {
         GIT_CREDENTIAL_ID='token-github'
         TELEGRAM_CHAT_ID = -796162386 
         TELEGRAM_CREDENTIAL_ID="6222583878:AAGXWc836jYOGwLeiHvXIPY4aijeECVskxA"
+        GIT_REGISTRY = 'registry.bkav.com/minhthc/test-jenkins'
     }
 
     // ----------------
@@ -58,7 +59,7 @@ pipeline {
 }
 
 void build_image(String version){
-    def dockerTag = "${env.GIT_URL}/BTI:${version}"
+    def dockerTag = "${env.GIT_REGISTRY}/BTI:${version}"
     sh "docker build -t $dockerTag ."
 }
 
