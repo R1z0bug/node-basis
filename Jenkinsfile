@@ -59,6 +59,6 @@ pipeline {
 
 void build_image(String version){
     def dockerTag = "${env.GIT_URL}/BTI:${version}"
-    sh "docker buildx build -t $dockerTag"
+    sh "docker build -t $dockerTag ."
 }
 
