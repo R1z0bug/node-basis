@@ -29,17 +29,21 @@ pipeline {
                     if (BRANCH_NAME == 'development') {
                         // env.BRANCH_NAME = 'Development'
                         def version = env.BUILD_NUMBER
-                        build_image(version)
                     } else if (BRANCH_NAME == 'main') {
                         // env.BRANCH_NAME = 'Production'
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
-                        build_image(version)
                     }
                 }
+                  withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
+                      // some block
+                  def dockerTag = "TEST/BTI:${version}"
+                   sh "docker build -t $dockerTag ."
+                          }
                 echo 'Building Branch: ' + env.BRANCH_NAME
                 echo 'Build Number: ' + TAG
                 echo 'Building Environment: ' + BRANCH_NAME
             }
+
         }
     }
     post{
@@ -56,10 +60,5 @@ pipeline {
           }
         }
     
-}
-
-void build_image(String version){
-    def dockerTag = "TEST/BTI:${version}"
-    sh "docker build -t $dockerTag ."
 }
 
