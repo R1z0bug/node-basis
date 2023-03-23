@@ -33,8 +33,9 @@ pipeline {
                         // env.BRANCH_NAME = 'Production'
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                     }
+                    def dockerTag = "TEST/BTI:${version}"
                 }
-                  def dockerTag = "TEST/BTI:${version}"
+                  
                 withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
                       // some block
                           sh "docker build -t $dockerTag ."
