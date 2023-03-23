@@ -41,9 +41,6 @@ pipeline {
                 echo 'Building Environment: ' + BRANCH_NAME
             }
         }
-        stage('Build image'){
-          
-        }
     }
 }
 
