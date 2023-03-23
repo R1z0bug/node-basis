@@ -27,10 +27,10 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        def env.version = env.BUILD_NUMBER
+                        def version = env.BUILD_NUMBER
                     } else if (BRANCH_NAME == 'main') {
                         env.BRANCH_NAME = 'Production'
-                        def env.version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                        def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                         
                     }
                 }
@@ -42,7 +42,7 @@ pipeline {
         stage('build and push') {
             steps{
                         script {
-                            def dockerTag = "${env.GIT_URL}/nips:${version_build}"
+                            def dockerTag = "${env.GIT_URL}/nips:${version}"
                             sh "docker build -t $dockerTag"
                     }
                 
@@ -51,9 +51,12 @@ pipeline {
         }
         post{
           always{
-
-             echo 'One way or another, I have finished'
-            Send_Telegram_message(env.BRANCH_NAME,env.version)
+            //------- gửi thông báo đến telegram khi có commit
+            echo 'One way or another, I have finished'
+            def message = "${BRANCH_NAME} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version}"
+            def botToken = env.TELEGRAM_CREDENTIAL_ID
+            def chatId = env.TELEGRAM_CHAT_ID
+            sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
           }
         }
         
@@ -61,11 +64,5 @@ pipeline {
     
 }
 
-void Send_Telegram_message(String env_name,String  version_build){
-//------- gửi thông báo đến telegram khi có commit
-                        def message = "${env_name} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version_build}"
-                        def botToken = env.TELEGRAM_CREDENTIAL_ID
-                        def chatId = env.TELEGRAM_CHAT_ID
-                        sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
-}
+
 
