@@ -49,7 +49,10 @@ pipeline {
             }
             
         }
-        post{
+
+        
+    }
+    post{
           always{
             //------- gửi thông báo đến telegram khi có commit
             echo 'One way or another, I have finished'
@@ -59,8 +62,6 @@ pipeline {
             sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
           }
         }
-        
-    }
     
 }
 
