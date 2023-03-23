@@ -56,9 +56,9 @@ pipeline {
           always{
             //------- gửi thông báo đến telegram khi có commit
             echo 'One way or another, I have finished'
-            def message = "${BRANCH_NAME} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version}"
-            def botToken = env.TELEGRAM_CREDENTIAL_ID
-            def chatId = env.TELEGRAM_CHAT_ID
+            message = "${BRANCH_NAME} Build complete: ${currentBuild.fullDisplayName} ${env.JOB_NAME}: version ${version}"
+            botToken = env.TELEGRAM_CREDENTIAL_ID
+            chatId = env.TELEGRAM_CHAT_ID
             sh "curl -X POST -H 'Content-Type: application/json' -d '{\"chat_id\":\"${chatId}\",\"text\":\"${message}\"}' https://api.telegram.org/bot${botToken}/sendMessage"
           }
         }
