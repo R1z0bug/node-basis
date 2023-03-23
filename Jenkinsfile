@@ -34,11 +34,11 @@ pipeline {
                         def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                     }
                 }
-                  withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
-                      // some block
                   def dockerTag = "TEST/BTI:${version}"
-                   sh "docker build -t $dockerTag ."
-                          }
+                withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
+                      // some block
+                          sh "docker build -t $dockerTag ."
+                }
                 echo 'Building Branch: ' + env.BRANCH_NAME
                 echo 'Build Number: ' + TAG
                 echo 'Building Environment: ' + BRANCH_NAME
