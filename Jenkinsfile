@@ -34,7 +34,7 @@ pipeline {
                         env.version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                     }
                     sh "echo ${env.version}"
-                    def dockerTag = "TEST/BTI:${env.version}"
+                    // def dockerTag = "TEST/BTI:${env.version}"
                 }
                   
                 withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
