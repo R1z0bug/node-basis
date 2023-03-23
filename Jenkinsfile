@@ -27,10 +27,10 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         BRANCH_NAME = 'Development'
-                        def version = env.BUILD_NUMBER
+                        def env.version = env.BUILD_NUMBER
                     } else if (BRANCH_NAME == 'main') {
-                        BRANCH_NAME = 'Production'
-                        def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                        env.BRANCH_NAME = 'Production'
+                        def env.version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                         
                     }
                 }
@@ -47,7 +47,14 @@ pipeline {
                     }
                 
             }
-            Send_Telegram_message(BRANCH_NAME,version)
+            
+        }
+        post{
+          always{
+
+             echo 'One way or another, I have finished'
+            Send_Telegram_message(env.BRANCH_NAME,env.version)
+          }
         }
         
     }
