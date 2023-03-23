@@ -28,13 +28,13 @@ pipeline {
                 script {
                     if (BRANCH_NAME == 'development') {
                         // env.BRANCH_NAME = 'Development'
-                        def version = env.BUILD_NUMBER
+                        env.version = env.BUILD_NUMBER
                     } else if (BRANCH_NAME == 'main') {
                         // env.BRANCH_NAME = 'Production'
-                        def version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
+                        env.version = sh(script: "grep \"version\" package.json | cut -d '\"' -f4 | tr -d '[[:space:]]'", returnStdout: true)
                     }
-                    sh "echo ${version}"
-                    def dockerTag = "TEST/BTI:${version}"
+                    sh "echo ${env.version}"
+                    def dockerTag = "TEST/BTI:${env.version}"
                 }
                   
                 withDockerRegistry(credentialsId: 'registry.bkav.com', url: 'https://registry.bkav.com/') {
