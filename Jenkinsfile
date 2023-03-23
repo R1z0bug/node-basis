@@ -47,9 +47,11 @@ pipeline {
                     }
                 
             }
+            Send_Telegram_message(BRANCH_NAME,version)
         }
-        Send_Telegram_message(BRANCH_NAME,version)
+        
     }
+    
 }
 
 void Send_Telegram_message(String env_name,String  version_build){
